@@ -24,6 +24,9 @@ c = db.cursor()    #facilitate db ops
 
 #==========================================================
 
+c.execute(".mode column")
+c.execute(".header on")
+
 create_course_table = "CREATE TABLE courses(code TEXT, mark INTEGER, id INTEGER)"
 c.execute(create_course_table)
 
