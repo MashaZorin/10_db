@@ -88,6 +88,7 @@ def print_average(ids):
         
 #wrapper for add
 def add_new_rows():
+    #creds to Ryan for checking idea
     with open('data/courses.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -95,6 +96,7 @@ def add_new_rows():
             for num in existing:
                 if (num[0] != 1):
                     add(row["code"], row["mark"], row['id'])
+                    print ""
 
 def testing():
     calc_peeps_avg()
