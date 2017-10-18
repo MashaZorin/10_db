@@ -7,27 +7,28 @@ db = sqlite3.connect(f) #open if f exists, otherwise create
 c = db.cursor()    #facilitate db ops
 
 #==========================================================
+def table_gen():
+    create_course_table = "CREATE TABLE courses(code TEXT, mark INTEGER, id INTEGER)"
+    c.execute(create_course_table)
 
-create_course_table = "CREATE TABLE courses(code TEXT, mark INTEGER, id INTEGER)"
-c.execute(create_course_table)
+    with open("data/courses.csv") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            add_course_row = "INSERT INTO courses VALUES('%s', %s, %s);" % (row["code"], row["mark"], row["id"])
+            #print add_course_row
+            c.execute(add_course_row)
 
-with open("data/courses.csv") as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        add_course_row = "INSERT INTO courses VALUES('%s', %s, %s);" % (row["code"], row["mark"], row["id"])
-        #print add_course_row
-        c.execute(add_course_row)
+    create_peeps_table = "CREATE TABLE peeps(name TEXT, age INTEGER, id INTEGER)"
+    c.execute(create_peeps_table)
 
-create_peeps_table = "CREATE TABLE peeps(name TEXT, age INTEGER, id INTEGER)"
-c.execute(create_peeps_table)
+    with open("data/peeps.csv") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            add_peeps_row = "INSERT INTO peeps VALUES('%s', %s, %s);" % (row["name"], row["age"], row["id"])
+            #print add_peeps_row
+            c.execute(add_peeps_row)
 
-with open("data/peeps.csv") as csvfile:
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        add_peeps_row = "INSERT INTO peeps VALUES('%s', %s, %s);" % (row["name"], row["age"], row["id"])
-        #print add_peeps_row
-        c.execute(add_peeps_row)
-
+table_gen()
 #==========================================================
 db.commit() #save changes
 db.close()  #close database

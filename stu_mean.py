@@ -55,7 +55,6 @@ def calc_peeps_avg():
         grade_list = ()
         for grade in grades:
             grade_list += grade
-            print grade_list
         e.execute("INSERT INTO peeps_avg VALUES(%s, %s)" % (ids[0], sum(grade_list)/len(grade_list)))
         '''
         try:
@@ -72,15 +71,21 @@ def calc_peeps_avg():
 #this is not redundant anymore
 def add(code, mark, ids):
     print "added '%s', %s, %s" % (code, mark, ids)
-    for grade in c.execute("INSERT INTO courses VALUES('%s', %s, %s)" % (code, mark, ids)):
-        print "old grade: " + str(grade[0])
+    #inserted new course
+    c.execute("INSERT INTO courses VALUES('%s', %s, %s)" % (code, mark, ids))
     x = ()
     for grade in c.execute("SELECT mark FROM courses WHERE courses.id = %s" % (ids)):
         x += grade
+    print_average(ids)
+    #updated average
+    print("updating average")
     c.execute("UPDATE peeps_avg SET average = %s WHERE %s = peeps_avg.id" % (float(sum(x)) / len(x), ids))
-    for grade in c.execute("SELECT average FROM peeps_avg WHERE peeps_avg.id = %s" % (ids)):
-        print "new grade: " + str(grade[0])
+    print_average(ids)
 
+def print_average(ids):
+    for grade in c.execute("SELECT average FROM peeps_avg WHERE peeps_avg.id = %s" % (ids)):
+        print "grade: " + str(grade[0])
+        
 #wrapper for add
 def add_new_rows():
     with open('data/courses.csv') as csvfile:
@@ -94,8 +99,8 @@ def add_new_rows():
 def testing():
     calc_peeps_avg()
     print_grades()
-    add_new_rows()
     add("life", 10000, 8)
+    add_new_rows()
 
 testing()
 
