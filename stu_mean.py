@@ -92,7 +92,7 @@ def add_new_rows():
     with open('data/courses.csv') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            existing = e.execute("SELECT count(*) FROM courses WHERE code = '%s' AND mark = %s AND id = %s" % (row["code"], row["mark"], row['id'])).fetchall()
+            existing = e.execute("SELECT count(*) FROM courses WHERE code = '%s' AND mark = %s AND id = %s" % (row["code"], row["mark"], row['id']))#.fetchall() #don't need this
             for num in existing:
                 if (num[0] != 1):
                     add(row["code"], row["mark"], row['id'])
